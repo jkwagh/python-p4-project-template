@@ -1,17 +1,27 @@
-#!/usr/bin/env python3
+from random import randint, choice as rc 
+from models import Attendee, Speaker, Activity, Admin, Event
 
-# Standard library imports
-from random import randint, choice as rc
-
-# Remote library imports
 from faker import Faker
 
-# Local imports
-from app import app
-from models import db
+from app import app 
+from models import db 
 
-if __name__ == '__main__':
+with app.app_context():
     fake = Faker()
-    with app.app_context():
-        print("Starting seed...")
-        # Seed code goes here!
+    
+    attendees = []
+    
+    for n in range(50):
+        attendee = Attendee(
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            organization=fake.oranization(),
+            phone=fake.phone_number(),
+            email=fake.email(),
+            address=fake.address(),
+            password=fake.password()
+        )
+        attendees.append(attendee)
+        
+    db.session.add_all(attendees)
+    
